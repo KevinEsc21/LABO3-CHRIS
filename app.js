@@ -21,11 +21,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/users", userRouter);
 app.use(authRouter);
+app.use(passport.authenticate("jwt", { session: false }))
+app.use("/users", userRouter);
 app.use("/words", wordRouter);
 
-//middlewares
-passport.authenticate("jwt", { session: false })
+
 
 module.exports = app;
