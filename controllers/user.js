@@ -30,13 +30,14 @@ exports.getUser = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
   try {
     //TODO: Requiere validation
-    let { username, name, lastName, email, password } = req.body;
+    let { username, name, lastName, email, password, role } = req.body;
     let newUser = await UserModel.create({
       username,
       name,
       email,
       lastName,
       password,
+      role,
     });
     newUser.password = null;
     res.send({ newUser });
@@ -51,7 +52,7 @@ exports.updateUser = async (req, res, next) => {
     // What user?
     let usernameToUpdate = req.params.username;
     // New data
-    let { username, name, lastName } = req.body; // TODO: Omit email and password, we need create a recovery strategic
+    let { username, name, lastName, role } = req.body; // TODO: Omit email and password, we need create a recovery strategic
     let user = await UserModel.findOne({ username: usernameToUpdate });
 
     if (!user)
@@ -62,13 +63,14 @@ exports.updateUser = async (req, res, next) => {
     user.username = username;
     user.name = name;
     user.lastName = lastName;
+    user.role = role;
 
     let updatedUser = await user.save();
 
     if (user == updatedUser) {
       return res.send({
         message: "User is updated",
-        user: { username, name, lastName, email: user.email},
+        user: { username, name, lastName, email: user.email, role: user.role },
       });
     }
     res.send({

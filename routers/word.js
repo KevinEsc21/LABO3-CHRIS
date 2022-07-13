@@ -1,3 +1,5 @@
+const {authorizeRae} = require('../middlewares/verifyRole');
+
 var {
     getAll,
     getWord,
@@ -10,7 +12,7 @@ var {
   
   router.get("/", getAll);
   router.get("/:term", getWord);
-  router.post("/", createWord);
+  router.post("/",authorizeRae, createWord);
   router.put("/:term", updateWord);
   router.delete("/:term", deleteWord);
   
